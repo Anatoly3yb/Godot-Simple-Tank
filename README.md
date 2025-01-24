@@ -1,6 +1,6 @@
 # Godot-Simple-Tank
 
-<video src='https://youtu.be/GkadqykKwcY?si=8gKE3S7L0Z-O6AzJ' width=180/>
+[![YOUTUBE Video](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://youtu.be/GkadqykKwcY?si=8gKE3S7L0Z-O6AzJ)
 
 <h1>Quick description</h1>
 An old abandoned project with the implementation of a physical transport controller in Godot 4.3. 

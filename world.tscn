@@ -1,0 +1,237 @@
+[gd_scene load_steps=16 format=3 uid="uid://dl1tlw17uyr4f"]
+
+[ext_resource type="Texture2D" uid="uid://t10tuptedglb" path="res://util/HDRI_Painted_Anime_Skies_Pack01/PaintedSky_Day_preview.jpg" id="1_lvl8u"]
+[ext_resource type="Texture2D" uid="uid://bi87eu2h7y7ks" path="res://darltexture_01.png" id="2_wmuld"]
+[ext_resource type="PackedScene" uid="uid://uslvx4ku2k7j" path="res://util/mountains/m_mountains.tscn" id="3_k1q5h"]
+[ext_resource type="PackedScene" uid="uid://dptsixngnbhj6" path="res://util/Terrain/terrain.tscn" id="4_0rsi2"]
+[ext_resource type="PackedScene" uid="uid://cd8p3b2pqyino" path="res://objects/tanks/MS-1.tscn" id="4_r4s1c"]
+[ext_resource type="Texture2D" uid="uid://bvxc26x8l0p1f" path="res://texture_01.png" id="6_nn4xj"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_fs6um"]
+panorama = ExtResource("1_lvl8u")
+
+[sub_resource type="Sky" id="Sky_rgcwd"]
+sky_material = SubResource("PanoramaSkyMaterial_fs6um")
+
+[sub_resource type="Environment" id="Environment_22vjo"]
+background_mode = 2
+sky = SubResource("Sky_rgcwd")
+ambient_light_color = Color(0.707624, 0.851353, 0.93136, 1)
+ambient_light_sky_contribution = 0.5
+reflected_light_source = 2
+tonemap_mode = 2
+fog_light_color = Color(0.717647, 0.784314, 0.85098, 1)
+fog_density = 0.001
+fog_height = -4.77
+fog_height_density = 0.609
+adjustment_contrast = 6.75
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_25rmx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bjhi8"]
+albedo_texture = ExtResource("2_wmuld")
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ithhv"]
+albedo_texture = ExtResource("6_nn4xj")
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6kdid"]
+transparency = 1
+no_depth_test = true
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.407775, 0.158745, 1)
+grow_amount = 3.528
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_aasvj"]
+material = SubResource("StandardMaterial3D_6kdid")
+top_radius = 0.06
+bottom_radius = 0.03
+height = 1.5
+radial_segments = 8
+rings = 2
+
+[sub_resource type="Gradient" id="Gradient_466x5"]
+offsets = PackedFloat32Array(0, 0.497908)
+colors = PackedColorArray(0.975842, 0.332995, 0.198597, 1, 0.319255, 0.319255, 0.319255, 1)
+
+[node name="World" type="Node"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_22vjo")
+camera_attributes = SubResource("CameraAttributesPractical_25rmx")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 2, 0)
+light_color = Color(0.394353, 0.394353, 0.394353, 1)
+shadow_enabled = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+use_collision = true
+size = Vector3(100, 1, 100)
+material = SubResource("StandardMaterial3D_bjhi8")
+
+[node name="m_mountains2" parent="." instance=ExtResource("3_k1q5h")]
+visible = false
+
+[node name="Terrain" parent="." instance=ExtResource("4_0rsi2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -48.3545, 0)
+visible = false
+
+[node name="m_МS-1" parent="." instance=ExtResource("4_r4s1c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.62279, 4.58222, -6.9276)
+suspension_rest_dist = 0.3
+wheel_radius = 0.12
+engine_power = 5.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer"]
+visible = false
+custom_minimum_size = Vector2(300, 180)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_bottom = 180.0
+grow_horizontal = 0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(300, 180)
+render_target_update_mode = 0
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CanvasLayer/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.55215, 5.83099, -6.80575)
+spring_length = 7.0
+
+[node name="Camera3D" type="Camera3D" parent="CanvasLayer/SubViewportContainer/SubViewport/SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
+fov = 45.0
+
+[node name="MultiMeshInstance3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 3.04601, 0.132358, 0.253948)
+use_collision = true
+height = 4.0
+sides = 16
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D2" type="CSGCylinder3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 3.04601, 0.132358, 1.21685)
+use_collision = true
+height = 4.0
+sides = 16
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D3" type="CSGCylinder3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 3.04601, 0.132358, 2.12286)
+use_collision = true
+height = 4.0
+sides = 16
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D4" type="CSGCylinder3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 3.04601, 0.132358, 3.08576)
+use_collision = true
+height = 4.0
+sides = 16
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D5" type="CSGCylinder3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 3.04601, 0.132358, 4.00722)
+use_collision = true
+height = 4.0
+sides = 16
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D6" type="CSGCylinder3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 3.04601, 0.132358, 4.97012)
+use_collision = true
+height = 4.0
+sides = 16
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D7" type="CSGCylinder3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 3.04601, 0.132358, 5.87613)
+use_collision = true
+height = 4.0
+sides = 16
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D8" type="CSGCylinder3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 3.04601, 0.132358, 6.83903)
+use_collision = true
+height = 4.0
+sides = 16
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D9" type="CSGCylinder3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 3.04601, 0.132358, 7.74669)
+use_collision = true
+height = 4.0
+sides = 16
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D10" type="CSGCylinder3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 3.04601, 0.132358, 8.70959)
+use_collision = true
+height = 4.0
+sides = 16
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D11" type="CSGCylinder3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 3.04601, 0.132358, 9.6156)
+use_collision = true
+height = 4.0
+sides = 16
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D12" type="CSGCylinder3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 3.04601, 0.132358, 10.5785)
+use_collision = true
+height = 4.0
+sides = 16
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D13" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 8.46486e-16, -0.949699, -4.15126e-08, 0.313164, 0.313164, 1.36888e-08, 0.949699, 3.04601, 1.11795, 20.3386)
+use_collision = true
+size = Vector3(2.97119, 4, 12.3907)
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D14" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 8.4947e-16, -0.861071, -3.76386e-08, 0.508485, 0.508485, 2.22266e-08, 0.86107, -2.03891, 1.11795, 20.3386)
+use_collision = true
+size = Vector3(2.97119, 4, 12.3907)
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="MultiMeshInstance3D15" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 1.69894e-15, -0.719121, -3.14338e-08, 0.694884, 0.694884, 3.03743e-08, 0.719121, -7.15873, 1.11795, 20.3386)
+use_collision = true
+size = Vector3(2.97119, 4, 12.3907)
+material = SubResource("StandardMaterial3D_ithhv")
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 2.75791, 5.04715, -5.92455)
+emitting = false
+amount = 32
+lifetime = 0.2
+one_shot = true
+speed_scale = 0.1
+explosiveness = 1.0
+randomness = 1.0
+mesh = SubResource("CylinderMesh_aasvj")
+particle_flag_align_y = true
+direction = Vector3(0, 1, 0)
+spread = 40.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 12.0
+initial_velocity_max = 14.0
+damping_min = 60.0
+damping_max = 100.0
+scale_amount_min = 0.1
+scale_amount_max = 0.2
+color_ramp = SubResource("Gradient_466x5")
